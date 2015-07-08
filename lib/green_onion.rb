@@ -4,7 +4,7 @@ require "green_onion/compare"
 require "green_onion/configuration"
 require "green_onion/errors"
 require "green_onion/browser"
-require "rainbow"
+require 'rainbow/ext/string'
 
 module GreenOnion
   class << self
@@ -57,11 +57,14 @@ module GreenOnion
       if(@screenshot.paths_hash.length > 1)
         puts "\n" + url.color(:cyan)
         if type[:percentage]
-          @compare.percentage_diff(@screenshot.paths_hash[:original], @screenshot.paths_hash[:fresh])
+          percentage = @compare.percentage_diff(@screenshot.paths_hash[:original], @screenshot.paths_hash[:fresh])
           threshold_alert(@compare.percentage_changed, threshold)
+          percentage
         end
         if type[:visual]
           @compare.visual_diff(@screenshot.paths_hash[:original], @screenshot.paths_hash[:fresh])
+          percentage = @compare.percentage_diff(@screenshot.paths_hash[:original], @screenshot.paths_hash[:fresh])
+          percentage
         end
       else
         puts "\n#{url}".color(:cyan) + " has been saved to #{@screenshot.paths_hash[:original]}".color(:yellow)
